@@ -3,141 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Telegram Mini App</title>
+    <title>AI Sous Chef</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: var(--tg-theme-text-color, #000000);
-        }
-
-        .info-card {
-            background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .info-item {
-            margin-bottom: 15px;
-        }
-
-        .info-label {
-            font-size: 14px;
-            color: var(--tg-theme-hint-color, #999999);
-            margin-bottom: 5px;
-        }
-
-        .info-value {
-            font-size: 16px;
-            color: var(--tg-theme-text-color, #000000);
-            font-weight: 500;
-        }
-
-        .button {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--tg-theme-button-color, #3390ec);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .button:active {
-            opacity: 0.8;
-        }
-
-        .status {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
-            border-radius: 10px;
-            text-align: center;
-            font-size: 14px;
-            color: var(--tg-theme-hint-color, #999999);
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Telegram Mini App</h1>
-        
-        <div class="info-card">
-            <div class="info-item">
-                <div class="info-label">Имя</div>
-                <div class="info-value" id="firstName">-</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Фамилия</div>
-                <div class="info-value" id="lastName">-</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Username</div>
-                <div class="info-value" id="username">-</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">ID</div>
-                <div class="info-value" id="userId">-</div>
-            </div>
-        </div>
 
-        <button class="button" id="actionButton">Нажми меня</button>
-
-        <div class="status" id="status">Приложение готово к работе</div>
+    <div id="screen-input" class="screen active">
+        <h2>Введите список продуктов</h2>
+        <input type="text" id="userCode" placeholder="Например: помидоры, огурцы, яйца">
+        <button class="btn" onclick="sendToServer()">Получить рецепты</button>
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
+    <div id="screen-loading" class="screen">
+        <h2>Готовка...</h2>
+    </div>
 
-        const user = tg.initDataUnsafe.user;
-        
-        if (user) {
-            document.getElementById('firstName').textContent = user.first_name || '-';
-            document.getElementById('lastName').textContent = user.last_name || '-';
-            document.getElementById('username').textContent = user.username ? '@' + user.username : '-';
-            document.getElementById('userId').textContent = user.id || '-';
-        } else {
-            document.getElementById('firstName').textContent = 'Недоступно';
-            document.getElementById('lastName').textContent = 'Недоступно';
-            document.getElementById('username').textContent = 'Недоступно';
-            document.getElementById('userId').textContent = 'Недоступно';
-        }
+    <div id="screen-result" class="screen">
+        <h2>Рецепты</h2>
+        <div class="result-box" id="resultText">Здесь будут рецепты</div>
+        <button class="btn btn-secondary" onclick="showScreen('screen-input')">Назад</button>
+    </div>
 
-        let clickCount = 0;
-        const actionButton = document.getElementById('actionButton');
-        const status = document.getElementById('status');
-
-        actionButton.addEventListener('click', function() {
-            clickCount++;
-            status.textContent = 'Кнопка нажата ' + clickCount + ' раз';
-            tg.HapticFeedback.impactOccurred('medium');
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
